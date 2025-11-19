@@ -1,4 +1,4 @@
-name: Deploy to Azure Container App
+name: Build and Push to Azure Container Registry
 
 on:
     push:
@@ -7,8 +7,6 @@ on:
     workflow_dispatch:
 
 env:
-    AZURE_CONTAINER_APP_NAME: retailmonolith-app
-    AZURE_RESOURCE_GROUP: retailmonolith-rg
     CONTAINER_REGISTRY: retailmonolithacr
     IMAGE_NAME: retailmonolith-webapp
 
@@ -42,18 +40,9 @@ jobs:
                   cache-from: type=registry,ref=${{ env.CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}:buildcache
                   cache-to: type=registry,ref=${{ env.CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}:buildcache,mode=max
 
-            - name: Log in to Azure
-              uses: azure/login@v1
-              with:
-                  creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-            - name: Deploy to Azure Container App
-              uses: azure/container-apps-deploy-action@v1
-              with:
-                  resourceGroup: ${{ env.AZURE_RESOURCE_GROUP }}
-                  containerAppName: ${{ env.AZURE_CONTAINER_APP_NAME }}
-                  imageToDeploy: ${{ env.CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
-                  targetPort: 8080
-                  environmentVariables: |
-                      ASPNETCORE_ENVIRONMENT=Production
-                      ConnectionStrings__DefaultConnection=secretref:connection-string
+            - name: Image push summary
+              run: |
+                  echo "✅ Docker image successfully pushed to ACR"
+                  echo "Registry: ${{ env.CONTAINER_REGISTRY }}.azurecr.io"
+                  echo "Image: ${{ env.IMAGE_NAME }}"
+                  echo "Tags: ${{ github.sha }}, latest"
