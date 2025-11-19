@@ -68,7 +68,7 @@ variable "container_app_name" {
 variable "container_image_name" {
   description = "Name of the container image in ACR"
   type        = string
-  default     = "retailmonolith"
+  default     = "retailmonolith-webapp"
 }
 
 variable "container_image_tag" {
