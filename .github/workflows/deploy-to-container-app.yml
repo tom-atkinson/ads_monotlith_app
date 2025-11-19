@@ -3,12 +3,8 @@ name: Build and Push to Azure Container Registry
 on:
     push:
         branches:
-            - PF-Test
+            - main
     workflow_dispatch:
-
-env:
-    CONTAINER_REGISTRY: retailmonolithacr
-    IMAGE_NAME: retailmonolith-webapp
 
 jobs:
     build-and-deploy:
