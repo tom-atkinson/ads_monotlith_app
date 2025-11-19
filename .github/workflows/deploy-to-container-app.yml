@@ -20,7 +20,7 @@ jobs:
             - name: Log in to Azure Container Registry
               uses: docker/login-action@v3
               with:
-                  registry: ${{ env.CONTAINER_REGISTRY }}.azurecr.io
+                  registry: ${{ vars.CONTAINER_REGISTRY }}.azurecr.io
                   username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
                   password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
 
@@ -31,14 +31,14 @@ jobs:
                   file: ./Dockerfile
                   push: true
                   tags: |
-                      ${{ env.CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
-                      ${{ env.CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
-                  cache-from: type=registry,ref=${{ env.CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}:buildcache
-                  cache-to: type=registry,ref=${{ env.CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}:buildcache,mode=max
+                      ${{ vars.CONTAINER_REGISTRY }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+                      ${{ vars.CONTAINER_REGISTRY }}.azurecr.io/${{ vars.IMAGE_NAME }}:latest
+                  cache-from: type=registry,ref=${{ vars.CONTAINER_REGISTRY }}.azurecr.io/${{ vars.IMAGE_NAME }}:buildcache
+                  cache-to: type=registry,ref=${{ vars.CONTAINER_REGISTRY }}.azurecr.io/${{ vars.IMAGE_NAME }}:buildcache,mode=max
 
             - name: Image push summary
               run: |
                   echo "✅ Docker image successfully pushed to ACR"
-                  echo "Registry: ${{ env.CONTAINER_REGISTRY }}.azurecr.io"
-                  echo "Image: ${{ env.IMAGE_NAME }}"
+                  echo "Registry: ${{ vars.CONTAINER_REGISTRY }}.azurecr.io"
+                  echo "Image: ${{ vars.IMAGE_NAME }}"
                   echo "Tags: ${{ github.sha }}, latest"

@@ -23,7 +23,8 @@ EXPOSE 8081
 
 # Set environment variables
 ENV ASPNETCORE_URLS=http://+:8080
-ENV ASPNETCORE_ENVIRONMENT=Development
+ENV LC_ALL=en_GB.UTF-8
+ENV LANG=en_GB.UTF-8
 
 # Run the application
 ENTRYPOINT ["dotnet", "RetailMonolith.dll"]
